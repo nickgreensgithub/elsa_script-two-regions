@@ -7,16 +7,10 @@ from itertools import chain
 def read_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('file_path')
-    parser.add_argument('-f', '--result_file_name', default="joined", required=False, help="The name of the resulting file, will have the same extension as the input files")
-    parser.add_argument('-s', '--column_separator', default=None, required=False)
+    parser.add_argument('-f', '--result_file_name', default="joined", required=False, help="The name of the resulting file")
+    parser.add_argument('-s', '--column_separator', default='\t', required=False)
     args = parser.parse_args()
     return args
-
-
-def unescaped_str(arg_str: str) -> str:
-    if arg_str.startswith('\\'):
-        return arg_str.removeprefix('\\')
-    return arg_str
 
 
 def read_file(path: str, col_separator='\t') -> pd.DataFrame:
@@ -140,7 +134,7 @@ def main() -> None:
     result = pd.concat([fill_gaps_result, segmented_cr_gaps])
     result.sort_values(by=[2], inplace=True)
 
-    result.to_csv(result_file_name, sep='\t', header=False, index=False)
+    result.to_csv(result_file_name, sep=column_separator, header=False, index=False)
 
 
 if __name__ == "__main__":
