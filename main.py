@@ -71,9 +71,9 @@ def populate_gaps(gaps: list[Sequence], sequences: list[Sequence]):
 def adjust_sequence_ends_to_fit_together(sequences: list[Sequence]):
     for index in range(1, len(sequences)):
         sequence = sequences[index]
-        last_sequence = sequences[index - 1]
-        if last_sequence and (last_sequence.end >= sequence.start - 1):
-            last_sequence.set_new_end(sequence.start - 1)
+        previous_sequence = sequences[index - 1]
+        if previous_sequence and (previous_sequence.end >= sequence.start - 1):
+            previous_sequence.set_new_end(sequence.start - 1)
 
 
 def read_args():
