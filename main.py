@@ -17,7 +17,7 @@ class Sequence:
         return f"{self.label}\t{self.name}\t{self.start}\t{self.end}\n"
 
     def __overlaps(self, other: "Sequence") -> bool:
-        return self.start < other.end and other.start < self.original_end
+        return self.start <= other.end and other.start <= self.original_end
 
     def get_sequence_overlap(self, other: "Sequence") -> Optional[tuple[int, int]]:
         if self.__overlaps(other):
