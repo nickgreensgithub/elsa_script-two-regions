@@ -19,10 +19,11 @@ class Sequence:
     def __overlaps(self, other: "Sequence") -> bool:
         return self.start < other.end and other.start < self.original_end
 
-    def get_sequence_overlap(self, other: "Sequence") -> Optional[tuple[int, int]]:  # start of overlap, end of overlap
+    def get_sequence_overlap(self, other: "Sequence") -> Optional[tuple[int, int]]:
         if self.__overlaps(other):
             return max(self.start, other.start), min(self.original_end, other.end)
         else:
+            # no overlap
             return None
 
     def set_new_end(self, new_end: int):
@@ -62,14 +63,13 @@ def populate_gaps(gaps: list[Sequence], sequences: list[Sequence]):
                 gap_fillers.append(gap_filler)
                 if overlap != (gap.start, gap.end):
                     gaps.extend(create_gap_sequences([gap_filler], gap.start, gap.end))
-            break
         if not filled:
             unfillable_gaps.append(gap)
     return gap_fillers, unfillable_gaps
 
 
 def adjust_sequence_ends_to_fit_together(sequences: list[Sequence]):
-    for index in range(1, len(sequences)):
+    for index in range(1, len(sequences)):  # Starting from 2nd sequence(so there's a previous one)
         sequence = sequences[index]
         previous_sequence = sequences[index - 1]
         if previous_sequence and (previous_sequence.end >= sequence.start - 1):
@@ -94,14 +94,17 @@ def get_region_end(df: pd.DataFrame) -> int:
     return max(df[3])
 
 
+# TODO refactor this part
 def main() -> None:
     args = read_args()
     input_file = args.file_path
     result_file_name = args.result_file_name
     column_separator = args.column_separator
+
     if not os.path.exists(input_file):
         print("File path does not exist")
         exit(1)
+
     df = read_file(input_file, column_separator)
     df_conserved_regions = df.loc[df[1] == 'CR']
     df_other_regions = df.loc[df[1] != 'CR']
