@@ -96,6 +96,10 @@ def get_region_end(df: pd.DataFrame) -> int:
     return max(df[3])
 
 
+def get_region_start(df: pd.DataFrame) -> int:
+    return min(df[2])
+
+
 # TODO refactor this part
 def main() -> None:
     args = read_args()
@@ -112,7 +116,7 @@ def main() -> None:
     df_other_regions = df.loc[df[1] != 'CR']
     conserved_regions = [(Sequence(row[0], row[1], row[2], row[3])) for index, row in df_conserved_regions.iterrows()]
     other_regions = [(Sequence(row[0], row[1], row[2], row[3])) for index, row in df_other_regions.iterrows()]
-    region_start = df.iloc[0][2]
+    region_start = get_region_start(df)
     region_end = get_region_end(df)
     adjust_sequence_ends_to_fit_together(other_regions)
     gaps = create_gap_sequences(other_regions, region_start, region_end)
