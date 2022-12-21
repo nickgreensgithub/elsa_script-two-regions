@@ -63,6 +63,8 @@ def populate_gaps(gaps: list[Sequence], sequences: list[Sequence]):
                 gap_fillers.append(gap_filler)
                 if overlap != (gap.start, gap.end):
                     gaps.extend(create_gap_sequences([gap_filler], gap.start, gap.end))
+            if filled:
+                break
         if not filled:
             unfillable_gaps.append(gap)
     return gap_fillers, unfillable_gaps
