@@ -90,6 +90,10 @@ def read_file(path: str, col_separator='\t') -> pd.DataFrame:
     return df
 
 
+def get_region_end(df: pd.DataFrame) -> int:
+    return max(df[3])
+
+
 def main() -> None:
     args = read_args()
     input_file = args.file_path
@@ -104,7 +108,7 @@ def main() -> None:
     conserved_regions = [(Sequence(row[0], row[1], row[2], row[3])) for index, row in df_conserved_regions.iterrows()]
     other_regions = [(Sequence(row[0], row[1], row[2], row[3])) for index, row in df_other_regions.iterrows()]
     region_start = df.iloc[0][2]
-    region_end = max(df.iloc[df.shape[1]][3], df.iloc[0][3])
+    region_end = get_region_end(df)
     adjust_sequence_ends_to_fit_together(other_regions)
     gaps = create_gap_sequences(other_regions, region_start, region_end)
 
